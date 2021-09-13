@@ -10,6 +10,7 @@
     <script type="text/javascript" th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.min.js}" ></script>
 </head>
 <body>
+
 <div class="container-fluid">
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -60,12 +61,42 @@
         </nav>
     </div>
     <div>
-        <h1>Shopme Admin Control panel!</h1>
+        <h1>Manage Users</h1>
+    </div>
+
+    <div>
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="table-dark">
+                <tr>
+                    <th>User ID</th>
+                    <th>Photos</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Roles</th>
+                    <th>Enabled</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${listOfUsers}" >
+                    <td>[[${user.id}]]</td>
+                    <td></td>
+                    <td>[[${user.email}]]</td>
+                    <td>[[${user.firstName}]]</td>
+                    <td>[[${user.lastName}]]</td>
+                    <td>[[${user.roles}]]</td>
+                    <td>[[${user.enabled}]]</td>
+                    <td>Edit &nbsp; Delete</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="text-center">
         <p>Shopme Control panel - Copyright &copy; Shopme</p>
     </div>
 </div>
+
 </body>
 </html>

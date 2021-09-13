@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(of = {"id"})
-@ToString
+//@ToString
 
 
 @Entity
@@ -51,5 +51,10 @@ public class Role {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
