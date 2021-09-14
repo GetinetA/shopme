@@ -3,14 +3,13 @@
 <head>
     <meta http-equiv="content-type" content="text/html" charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
-    <title>Home - Shopme Admin</title>
+    <title>Create New User</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}" />
     <script type="text/javascript" th:src="@{webjars/jquery/3.4.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.min.js}" ></script>
 </head>
 <body>
-
 <div class="container-fluid">
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -61,47 +60,81 @@
         </nav>
     </div>
     <div>
-        <h1>Manage Users</h1>
-        <a th:href="@{/users/new}" >Create New User</a>
+        <h1>Manage Users | Create New User</h1>
     </div>
 
-    <div th:if="${message != null}" class="alert alert-success text-center" >
-        [[${message}]]
-    </div>
+    <form th:action="@{/users/save}" method="post" th:object="${user}"
+          style="max-width: 700px; margin: 0 auto">
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Email:</label>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" th:field="*{email}"
+                           required minlength="8" maxlength="128" />
+                </div>
+            </div>
 
-    <div>
-        <table class="table table-bordered table-striped table-hover table-responsive-xl">
-            <thead class="table-dark">
-                <tr>
-                    <th>User ID</th>
-                    <th>Photos</th>
-                    <th>Email</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Roles</th>
-                    <th>Enabled</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="user : ${listOfUsers}" >
-                    <td>[[${user.id}]]</td>
-                    <td></td>
-                    <td>[[${user.email}]]</td>
-                    <td>[[${user.firstName}]]</td>
-                    <td>[[${user.lastName}]]</td>
-                    <td>[[${user.roles}]]</td>
-                    <td>[[${user.enabled}]]</td>
-                    <td>Edit &nbsp; Delete</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >First Name:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{firstName}"
+                           required minlength="2" maxlength="45" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Last Name:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{lastName}"
+                           required minlength="2" maxlength="45" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Password:</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" th:field="*{password}"
+                           required minlength="8" maxlength="20" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Roles:</label>
+                <div class="col-sm-8">
+                    <th:block th:each="role : ${listRoles}" >
+                        <input type="checkbox" th:field="*{roles}"
+                               th:text="${role.name}" th:value="${role.id}" class="m-2"/>
+                        - <small>[[${role.description}]]</small> <br/>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Enabled:</label>
+                <div class="col-sm-8">
+                    <input type="checkbox" th:field="*{enabled}" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <input id="btnCancel" type="button" value="Cancel" class="btn btn-secondary"/>
+            </div>
+        </div>
+    </form>
 
     <div class="text-center">
         <p>Shopme Control panel - Copyright &copy; Shopme</p>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnCancel").on("click", function (){
+            window.location = "[[@{/users}]]";
+        })
+    });
+</script>
 
 </body>
 </html>
