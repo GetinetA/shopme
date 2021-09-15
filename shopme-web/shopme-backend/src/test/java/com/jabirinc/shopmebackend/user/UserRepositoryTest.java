@@ -2,6 +2,7 @@ package com.jabirinc.shopmebackend.user;
 
 import com.jabirinc.shopmecommon.entity.Role;
 import com.jabirinc.shopmecommon.entity.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -107,7 +108,11 @@ class UserRepositoryTest {
     }
 
     @Test
-    void name() {
+    void testGetUserByEmail() {
+        String email = "getti@jabirinc.com";
+
+        User user = userRepository.getUserByEmail(email);
+        Assertions.assertThat(user).isNotNull();
     }
 
     @AfterEach
