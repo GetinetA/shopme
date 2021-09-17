@@ -123,6 +123,24 @@ class UserRepositoryTest {
         Assertions.assertThat(count).isGreaterThan(0);
     }
 
+    @Test
+    void testDisableUser() {
+        Integer id = 1;
+        userRepository.updateEnabledStatus(id, false);
+
+        User user = userRepository.findById(id).get();
+        Assertions.assertThat(user.isEnabled()).isFalse();
+    }
+
+    @Test
+    void testEnableUser() {
+        Integer id = 1;
+        userRepository.updateEnabledStatus(id, true);
+
+        User user = userRepository.findById(id).get();
+        Assertions.assertThat(user.isEnabled()).isTrue();
+    }
+
     @AfterEach
     void tearDown() {
     }

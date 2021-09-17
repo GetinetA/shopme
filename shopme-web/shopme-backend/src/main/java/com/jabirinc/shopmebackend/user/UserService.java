@@ -6,6 +6,7 @@ import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
  * Created by Getinet on 9/13/21
  */
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -96,5 +98,9 @@ public class UserService {
             throw new UserNotFoundException("Could not find any user with ID " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    public void updateEnabledStatus(Integer id, boolean enabled) {
+        userRepository.updateEnabledStatus(id, enabled);
     }
 }

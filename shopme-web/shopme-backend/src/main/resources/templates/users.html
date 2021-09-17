@@ -95,9 +95,11 @@
                     <td>[[${user.roles}]]</td>
                     <td>
 
-                        <a href="" class="fas fa-check-circle fa-2x icon-green"
+                        <a class="fas fa-check-circle fa-2x icon-green"
+                           th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
                            th:if="${user.enabled == true}"></a>
-                        <a href="" class="fas fa-check-circle fa-2x icon-dark"
+                        <a class="fas fa-circle fa-2x icon-dark"
+                           th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
                            th:if="${user.enabled == false}"></a>
                     </td>
                     <td>
