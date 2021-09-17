@@ -115,6 +115,14 @@ class UserRepositoryTest {
         Assertions.assertThat(user).isNotNull();
     }
 
+    @Test
+    void testCountById() {
+        Integer id = 1;
+        Long count = userRepository.countById(id);
+
+        Assertions.assertThat(count).isGreaterThan(0);
+    }
+
     @AfterEach
     void tearDown() {
     }
