@@ -101,7 +101,8 @@
                            th:if="${user.enabled == false}"></a>
                     </td>
                     <td>
-                        <a href="" class="fas fa-edit fa-2x icon-green"/>
+                        <a th:href="@{'/users/edit/' + ${user.id}}" class="fas fa-edit fa-2x icon-green"
+                           title="Edit this user"/>
                         <a href="" class="fas fa-trash fa-2x icon-dark"/>
                     </td>
                 </tr>
