@@ -2,16 +2,21 @@ package com.jabirinc.shopmebackend.controller;
 
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmebackend.user.UserService;
+import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Role;
 import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,10 +51,29 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(User user, RedirectAttributes redirectAttributes) {
+    public String saveUser(User user, RedirectAttributes redirectAttributes,
+                           @RequestParam("userImage") MultipartFile multipartFile) throws IOException {
 
-        //System.out.println(user);
-        userService.save(user);
+        System.out.println(user);
+        System.out.println(multipartFile.getOriginalFilename());
+
+        if (!multipartFile.isEmpty()) {
+
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            user.setPhotos(fileName);
+            User savedUser = userService.save(user);
+
+            String uploadDir = FileUploadUtil.UPLOAD_DIRECTORY + savedUser.getId();
+
+            FileUploadUtil.cleanDirectory(uploadDir);
+            FileUploadUtil.saveFile(uploadDir,fileName, multipartFile);
+        } else {
+            if (user.getPhotos().isEmpty()) {
+                user.setPhotos(null);
+            }
+            userService.save(user);
+        }
+
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
 
         return "redirect:/users";

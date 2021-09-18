@@ -18,6 +18,8 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
+    public static final String DEFAULT_USER_IMAGE_PATH = "/images/default-user.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -58,4 +60,12 @@ public class User {
         this.roles.add(role);
     }
 
+    @Transient
+    public String getPhotosImagePath() {
+
+        if (id == null || photos == null) {
+            return DEFAULT_USER_IMAGE_PATH;
+        }
+        return "/user-photos/" + this.id + "/" + this.photos;
+    }
 }

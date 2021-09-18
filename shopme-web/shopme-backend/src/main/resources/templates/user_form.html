@@ -63,8 +63,8 @@
         <h1>Manage Users | [[${pageTitle}]]</h1>
     </div>
 
-    <form th:action="@{/users/save}" method="post" th:object="${user}"
-          onsubmit="return checkEmailUniqueness(this);"
+    <form th:action="@{/users/save}" method="post" enctype="multipart/form-data"
+          th:object="${user}" onsubmit="return checkEmailUniqueness(this);"
           style="max-width: 700px; margin: 0 auto">
 
         <input type="hidden" th:field="*{id}" />
@@ -121,6 +121,17 @@
                 </div>
             </div>
 
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" >Photos:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" th:field="*{photos}" />
+                    <input type="file" id="fileImage" name="userImage" accept="image/png, image/jpeg"
+                           class="mb-2"/>
+                    <img id="thumbnail" alt="Photos preview" th:src="@{${user.photosImagePath}}"
+                         class="img-fluid"/>
+                </div>
+            </div>
+
             <div class="text-center">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <input id="btnCancel" type="button" value="Cancel" class="btn btn-secondary"/>
@@ -151,16 +162,39 @@
 </div>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
         $("#btnCancel").on("click", function (){
             window.location = "[[@{/users}]]";
         })
+
+        $("#fileImage").change(function () {
+            fileSize = this.files[0].size;
+            alert("File size: " + fileSize);
+            if (fileSize > 1048576) {
+                this.setCustomValidity("You must choose an image less than 1MB!");
+                this.reportValidity();
+            } else {
+                this.setCustomValidity("");
+                showImageThumbnail(this);
+            }
+        });
     });
+
+    function showImageThumbnail(fileInput) {
+        let file = fileInput.files[0];
+        let reader = new FileReader();
+        reader.onload = function (ev) {
+            $("#thumbnail").attr("src", ev.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    }
 
     function checkEmailUniqueness(form) {
 
         //alert("check email uniqueness");
-        url = "[[@{/users/check_email}]]";
+        var url = "[[@{/users/check_email}]]";
         userEmail = $("#email").val();
         userId = $("#id").val();
         csrfValue = $("input[name='_csrf']").val();
