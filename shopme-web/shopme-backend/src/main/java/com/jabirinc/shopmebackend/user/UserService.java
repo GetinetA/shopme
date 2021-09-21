@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     public static final int USERS_PER_PAGE = 4;
+    public static final String SORT_ASC = "asc";
+    public static final String SORT_DESC = "desc";
+    public static final String DEFAULT_SORT_PROP = "firstName";
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -39,8 +43,10 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public Page<User> listByPage(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
+    public Page<User> listByPage(int pageNumber, String sortField, String sortDir) {
+        Sort sort = Sort.by(sortField);
+        sort = sortDir.equalsIgnoreCase(SORT_ASC) ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE, sort);
         return userRepository.findAll(pageable);
     }
 
