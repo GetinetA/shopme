@@ -1,6 +1,7 @@
 package com.jabirinc.shopmebackend.controller;
 
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
+import com.jabirinc.shopmebackend.export.UserCsvExporter;
 import com.jabirinc.shopmebackend.user.UserService;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Role;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -155,6 +157,17 @@ public class UserController {
         String status = enabled? "enabled":"disabled";
         redirectAttributes.addFlashAttribute("message",
                 "The user account with ID " + id + " has been " + status);
+
+        return "redirect:/users";
+    }
+
+    @GetMapping(value = "/users/export/csv", produces = "text/csv")
+    public String exportToCSV(HttpServletResponse response) {
+
+        List<User> listOfUsers = userService.listAll();
+
+        UserCsvExporter userCsvExporter = new UserCsvExporter();
+        userCsvExporter.export(listOfUsers, response);
 
         return "redirect:/users";
     }
