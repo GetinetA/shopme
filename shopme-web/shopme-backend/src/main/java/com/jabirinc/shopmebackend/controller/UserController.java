@@ -4,6 +4,7 @@ import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmebackend.export.AbstractExporter;
 import com.jabirinc.shopmebackend.export.UserCsvExporter;
 import com.jabirinc.shopmebackend.export.UserExcelExporter;
+import com.jabirinc.shopmebackend.export.UserPdfExporter;
 import com.jabirinc.shopmebackend.user.UserService;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Role;
@@ -165,24 +166,32 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
-    public String exportToCSV(HttpServletResponse response) {
+    public void exportToCSV(HttpServletResponse response) {
 
         List<User> listOfUsers = userService.listAll();
 
         UserCsvExporter userCsvExporter = new UserCsvExporter();
         userCsvExporter.export(listOfUsers, response);
 
-        return "redirect:/users";
     }
 
     @GetMapping(value = "/users/export/excel")
-    public String exportToExcel(HttpServletResponse response) {
+    public void exportToExcel(HttpServletResponse response) {
 
         List<User> listOfUsers = userService.listAll();
 
         UserExcelExporter userExcelExporter = new UserExcelExporter();
         userExcelExporter.export(listOfUsers, response);
 
-        return "redirect:/users";
+    }
+
+    @GetMapping(value = "/users/export/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public void exportToPdf(HttpServletResponse response) {
+
+        List<User> listOfUsers = userService.listAll();
+
+        UserPdfExporter userExcelExporter = new UserPdfExporter();
+        userExcelExporter.export(listOfUsers, response);
+
     }
 }

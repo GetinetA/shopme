@@ -19,6 +19,7 @@ public abstract class AbstractExporter<T> {
     public static final String EXPORT_FILE_PREFIX = "users_";
     public static final String CSV_FILE_EXT = ".csv";
     public static final String EXCEL_FILE_EXT = ".xlsx";
+    public static final String PDF_FILE_EXT = ".pdf";
     public static final String CONTENT_TYPE_CSV = "text/csv";
     public static final String FILE_NAME_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
 
