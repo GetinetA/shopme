@@ -7,44 +7,27 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
 /**
  * Created by Getinet on 9/22/21
  */
-public class UserCsvExporter {
+public class UserCsvExporter extends AbstractExporter<User> {
 
-    public static final String EXPORT_FILE_PREFIX = "users_";
-    public static final String CSV_FILE_EXT = ".csv";
-    public static final String MEDIA_TYPE_CSV = "text/csv";
-    public static final String FILE_NAME_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss";
-
+    @Override
     public void export(List<User> listUsers, HttpServletResponse response) {
 
         String fileName = null;
-        try {
-            DateFormat dateFormat = new SimpleDateFormat(FILE_NAME_DATE_FORMAT);
-            String timestamp = dateFormat.format(new Date());
-            fileName = EXPORT_FILE_PREFIX + timestamp + CSV_FILE_EXT;
+        try(CsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);) {
 
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=" + fileName;
+            fileName = super.createFileName(AbstractExporter.CSV_FILE_EXT);
+            super.setResponseHeader(response, AbstractExporter.CONTENT_TYPE_CSV, fileName);
 
-            response.setContentType(MEDIA_TYPE_CSV);
-            response.setHeader(headerKey, headerValue);
-            CsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-            String[] csvHeader = {"User ID", "Email", "First Name", "Last Name", "Roles", "Enabled"};
-            String[] fieldMapping = {"id", "email", "firstName", "lastName", "roles", "enabled"};
-
-            csvWriter.writeHeader(csvHeader);
+            csvWriter.writeHeader(AbstractExporter.USERS_EXPORT_LABELS);
             for (User user : listUsers) {
-                csvWriter.write(user, fieldMapping);
+                csvWriter.write(user, AbstractExporter.USERS_EXPORT_FIELDS);
             }
-            csvWriter.close();
 
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,

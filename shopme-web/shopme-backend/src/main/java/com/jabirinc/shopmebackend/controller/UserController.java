@@ -1,7 +1,9 @@
 package com.jabirinc.shopmebackend.controller;
 
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
+import com.jabirinc.shopmebackend.export.AbstractExporter;
 import com.jabirinc.shopmebackend.export.UserCsvExporter;
+import com.jabirinc.shopmebackend.export.UserExcelExporter;
 import com.jabirinc.shopmebackend.user.UserService;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Role;
@@ -9,6 +11,7 @@ import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -161,13 +164,24 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping(value = "/users/export/csv", produces = "text/csv")
+    @GetMapping(value = "/users/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public String exportToCSV(HttpServletResponse response) {
 
         List<User> listOfUsers = userService.listAll();
 
         UserCsvExporter userCsvExporter = new UserCsvExporter();
         userCsvExporter.export(listOfUsers, response);
+
+        return "redirect:/users";
+    }
+
+    @GetMapping(value = "/users/export/excel")
+    public String exportToExcel(HttpServletResponse response) {
+
+        List<User> listOfUsers = userService.listAll();
+
+        UserExcelExporter userExcelExporter = new UserExcelExporter();
+        userExcelExporter.export(listOfUsers, response);
 
         return "redirect:/users";
     }

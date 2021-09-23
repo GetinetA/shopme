@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <super.csv.version>2.4.0</super.csv.version>
+        <apache.poi.version>4.1.1</apache.poi.version>
     </properties>
 
     <dependencies>
@@ -24,6 +25,11 @@
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>
             <version>${super.csv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${apache.poi.version}</version>
         </dependency>
     </dependencies>
 
