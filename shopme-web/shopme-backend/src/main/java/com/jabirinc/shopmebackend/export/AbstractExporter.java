@@ -33,10 +33,16 @@ public abstract class AbstractExporter<T> {
     }
 
     public String createFileName(String fileExtension) {
+
+        StringBuilder fileNameBuffer = new StringBuilder();
         DateFormat dateFormat = new SimpleDateFormat(FILE_NAME_DATE_FORMAT);
+
         String timestamp = dateFormat.format(new Date());
-        String fileName = EXPORT_FILE_PREFIX + timestamp + fileExtension;
-        return fileName;
+        fileNameBuffer.append(EXPORT_FILE_PREFIX);
+        fileNameBuffer.append(timestamp);
+        fileNameBuffer.append(fileExtension);
+
+        return fileNameBuffer.toString();
     }
 
     public abstract void export(List<T> data, HttpServletResponse response);
