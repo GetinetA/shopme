@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <body>
 <div th:fragment="menu">
@@ -54,7 +55,8 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                       sec:authentication="principal.fullName"></a>
+                       th:href="@{/account}"
+                       sec:authentication="principal.user.fullName"></a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                     </div>

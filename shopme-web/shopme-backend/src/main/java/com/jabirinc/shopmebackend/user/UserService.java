@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -73,6 +74,26 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateAccount(User userInForm) {
+
+        User userInDB = userRepository.findById(userInForm.getId()).get();
+        if (!userInForm.getPassword().isEmpty()) {
+            userInDB.setPassword(userInForm.getPassword());
+            encodePassword(userInDB);
+        }
+        if (userInForm.getPhotos() != null) {
+            userInDB.setPhotos(userInForm.getPhotos());
+        }
+        if (!StringUtils.isEmptyOrWhitespace(userInForm.getFirstName())) {
+            userInDB.setFirstName(userInForm.getFirstName());
+        }
+        if (!StringUtils.isEmptyOrWhitespace(userInForm.getLastName())) {
+            userInDB.setLastName(userInForm.getLastName());
+        }
+
+        return userRepository.save(userInDB);
+    }
+
     public List<Role> loadRoles() {
         return (List<Role>) roleRepository.findAll();
     }
@@ -124,5 +145,10 @@ public class UserService {
 
     public void updateEnabledStatus(Integer id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
+    }
+
+    public User getByEmail(String email) {
+
+        return userRepository.getUserByEmail(email);
     }
 }

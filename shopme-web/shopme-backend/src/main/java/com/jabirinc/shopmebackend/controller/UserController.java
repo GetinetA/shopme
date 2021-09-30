@@ -1,5 +1,6 @@
 package com.jabirinc.shopmebackend.controller;
 
+import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmebackend.export.AbstractExporter;
 import com.jabirinc.shopmebackend.export.UserCsvExporter;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -89,16 +91,15 @@ public class UserController {
 
     @PostMapping("/users/save")
     public String saveUser(User user, RedirectAttributes redirectAttributes,
+                           @AuthenticationPrincipal ShopmeUserDetails loggedUser,
                            @RequestParam("userImage") MultipartFile multipartFile) throws IOException {
 
-        System.out.println(user);
-        System.out.println(multipartFile.getOriginalFilename());
-
+        User savedUser;
         if (!multipartFile.isEmpty()) {
 
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
-            User savedUser = userService.save(user);
+            savedUser = userService.save(user);
 
             String uploadDir = FileUploadUtil.UPLOAD_DIRECTORY + savedUser.getId();
 
@@ -108,12 +109,16 @@ public class UserController {
             if (user.getPhotos().isEmpty()) {
                 user.setPhotos(null);
             }
-            userService.save(user);
+            savedUser = userService.save(user);
         }
 
+        // an Admin can edit other users. if editing one's own info, update principal user
+        if (loggedUser.getUser().getId().equals(savedUser.getId())) {
+            loggedUser.setUser(savedUser);
+        }
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
 
-        return getRedirectURLToAffectedUser(user);
+        return getRedirectURLToAffectedUser(savedUser);
     }
 
     private String getRedirectURLToAffectedUser(User user) {
