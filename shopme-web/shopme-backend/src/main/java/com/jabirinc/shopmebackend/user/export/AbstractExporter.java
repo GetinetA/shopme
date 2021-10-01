@@ -1,4 +1,4 @@
-package com.jabirinc.shopmebackend.export;
+package com.jabirinc.shopmebackend.user.export;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;

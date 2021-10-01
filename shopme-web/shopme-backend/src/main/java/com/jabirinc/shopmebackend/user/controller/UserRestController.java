@@ -1,4 +1,4 @@
-package com.jabirinc.shopmebackend.controller;
+package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

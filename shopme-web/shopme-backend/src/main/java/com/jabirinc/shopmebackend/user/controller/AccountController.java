@@ -1,4 +1,4 @@
-package com.jabirinc.shopmebackend.controller;
+package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.user.UserService;
@@ -37,7 +37,7 @@ public class AccountController {
         String email = loggedUser.getUsername();
         User user = userService.getByEmail(email);
         model.addAttribute("user", user);
-        return "/account_form";
+        return "users/account_form";
     }
 
     @PostMapping("/account/update")

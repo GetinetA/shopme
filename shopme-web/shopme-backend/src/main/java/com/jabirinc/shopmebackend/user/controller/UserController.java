@@ -1,11 +1,11 @@
-package com.jabirinc.shopmebackend.controller;
+package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
-import com.jabirinc.shopmebackend.export.AbstractExporter;
-import com.jabirinc.shopmebackend.export.UserCsvExporter;
-import com.jabirinc.shopmebackend.export.UserExcelExporter;
-import com.jabirinc.shopmebackend.export.UserPdfExporter;
+import com.jabirinc.shopmebackend.user.export.AbstractExporter;
+import com.jabirinc.shopmebackend.user.export.UserCsvExporter;
+import com.jabirinc.shopmebackend.user.export.UserExcelExporter;
+import com.jabirinc.shopmebackend.user.export.UserPdfExporter;
 import com.jabirinc.shopmebackend.user.UserService;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Role;
@@ -75,7 +75,7 @@ public class UserController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -86,7 +86,7 @@ public class UserController {
         model.addAttribute("user", new User());
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -137,7 +137,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("listRoles", listRoles);
             model.addAttribute("pageTitle", "Edit User (ID : " + id + ")");
-            return "user_form";
+            return "users/user_form";
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/users";
