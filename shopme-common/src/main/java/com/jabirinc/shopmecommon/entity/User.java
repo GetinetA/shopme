@@ -3,6 +3,7 @@ package com.jabirinc.shopmecommon.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     public static final String DEFAULT_USER_IMAGE_PATH = "/images/default-user.png";
 
