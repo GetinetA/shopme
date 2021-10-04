@@ -1,5 +1,8 @@
 package com.jabirinc.shopmebackend.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -12,7 +15,10 @@ import java.nio.file.StandardCopyOption;
 /**
  * Created by Getinet on 9/18/21
  */
+@Slf4j
 public class FileUploadUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
 
     public static final String FILE_SEPARATOR = "/";
     public static final String UPLOAD_FOLDER = "user-photos";
@@ -46,12 +52,16 @@ public class FileUploadUtil {
                     try {
                         Files.delete(file);
                     } catch (IOException e) {
-                        System.out.println("Could not delete file: " + file);
+                        //System.out.println("Could not delete file: " + file);
+                        log.error("Could not delete file: " + file); // using lombok
+                        LOGGER.error("Could not delete file: " + file); // using static variable
                     }
                 }
             });
         } catch (IOException e) {
-            System.out.println("Could not list directory: " + dirPath);
+            //System.out.println("Could not list directory: " + dirPath);
+            log.error("Could not list directory: " + dirPath); // using lombok
+            LOGGER.error("Could not list directory: " + dirPath); // using static variable
         }
     }
 }
