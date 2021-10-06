@@ -1,7 +1,9 @@
 package com.jabirinc.shopmecommon.entity;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,13 +13,16 @@ import java.util.Set;
  * Created by Getinet on 10/3/21
  */
 
-@Data
-@RequiredArgsConstructor
+//@Data
+@Setter
+@Getter
+@NoArgsConstructor
 
 @Entity()
 @Table(name = "categories")
 public class Category {
 
+    public static final String DEFAULT_CATEGORY_IMAGE_NAME = "default.png";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -40,4 +45,22 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
 
+    public Category(Integer id) {
+        this.id = id;
+    }
+
+    public Category(String name) {
+        this(name, name, DEFAULT_CATEGORY_IMAGE_NAME);
+    }
+
+    public Category(String name, String alias, String image) {
+        this.name = name;
+        this.alias = alias;
+        this.image = image;
+    }
+
+    public Category(String name, Category parent) {
+        this(name);
+        this.parent = parent;
+    }
 }
