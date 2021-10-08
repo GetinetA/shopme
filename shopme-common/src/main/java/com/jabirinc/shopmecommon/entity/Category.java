@@ -22,7 +22,9 @@ import java.util.Set;
 @Table(name = "categories")
 public class Category {
 
-    public static final String DEFAULT_CATEGORY_IMAGE_NAME = "default.png";
+    public static final String DEFAULT_CATEGORY_IMAGE_NAME = "image-thumbnail.png";
+    public static final String DEFAULT_CATEGORY_IMAGE_PATH = "/images/" + DEFAULT_CATEGORY_IMAGE_NAME;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -62,5 +64,14 @@ public class Category {
     public Category(String name, Category parent) {
         this(name);
         this.parent = parent;
+    }
+
+    @Transient
+    public String getCategoryImagePath() {
+
+        if (id == null || image == null) {
+            return DEFAULT_CATEGORY_IMAGE_PATH;
+        }
+        return "/category-images/" + this.id + "/" + this.image;
     }
 }

@@ -6,8 +6,8 @@
 <div class="container-fluid">
     <div th:replace="navigation::menu"/>
 
-    <div>
-        <h1>Manage Users | [[${pageTitle}]]</h1>
+    <div class="text-center">
+        <h2>Manage Users | [[${pageTitle}]]</h2>
     </div>
 
     <form th:action="@{/users/save}" method="post" enctype="multipart/form-data"
