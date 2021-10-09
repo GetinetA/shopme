@@ -17,13 +17,13 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        Path userPhotosDir = Paths.get(FileUploadUtil.UPLOAD_FOLDER);
+        Path userPhotosDir = Paths.get(FileUploadUtil.USER_UPLOAD_FOLDER);
         String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
 
         // java.net.UnknownHostException: Users in MacOS when using the following
         // .addResourceLocations("file:/" + userPhotosPath + "/");
         // syntax information https://en.wikipedia.org/wiki/File_URI_scheme
-        registry.addResourceHandler("/" + FileUploadUtil.UPLOAD_FOLDER  + "/**")
+        registry.addResourceHandler("/" + FileUploadUtil.USER_UPLOAD_FOLDER + "/**")
                 .addResourceLocations("file:" + userPhotosPath + "/");
 
     }

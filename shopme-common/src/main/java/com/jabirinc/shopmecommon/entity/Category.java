@@ -13,7 +13,6 @@ import java.util.Set;
  * Created by Getinet on 10/3/21
  */
 
-//@Data
 @Setter
 @Getter
 @NoArgsConstructor
@@ -64,6 +63,14 @@ public class Category {
     public Category(String name, Category parent) {
         this(name);
         this.parent = parent;
+    }
+
+    public static Category create(Integer id, String name) {
+        Category copyCategory = new Category();
+        copyCategory.setId(id);
+        copyCategory.setName(name);
+
+        return copyCategory;
     }
 
     @Transient

@@ -21,11 +21,14 @@ public class FileUploadUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
 
     public static final String FILE_SEPARATOR = "/";
-    public static final String UPLOAD_FOLDER = "user-photos";
-    public static final String UPLOAD_DIRECTORY = UPLOAD_FOLDER + FILE_SEPARATOR;
+    public static final String USER_UPLOAD_FOLDER = "user-photos";
+    public static final String USER_UPLOAD_DIRECTORY = USER_UPLOAD_FOLDER + FILE_SEPARATOR;
 
-    public static final String DEFAULT_USER_IMAGE_PATH = "/images/default-user.png";
+    public static final String USER_DEFAULT_IMAGE_PATH = "/images/default-user.png";
 
+    public static final String CATEGORY_UPLOAD_FOLDER = "category-images";
+    public static final String CATEGORY_UPLOAD_DIRECTORY = CATEGORY_UPLOAD_FOLDER + FILE_SEPARATOR;
+    public static final String CATEGORY_DEFAULT_IMAGE_PATH = "/images/image-thumbnail.png";
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
             throws IOException {
