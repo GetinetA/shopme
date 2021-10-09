@@ -2,19 +2,20 @@ package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.category.CategoryService;
 import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
+import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
+import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmebackend.user.export.AbstractExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Category;
+import com.jabirinc.shopmecommon.entity.Role;
+import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,19 +63,41 @@ public class CategoryController {
                            @AuthenticationPrincipal ShopmeUserDetails loggedUser,
                            @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        category.setImage(fileName);
-        Category savedCategory = categoryService.save(category);
+        Category savedCategory;
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            category.setImage(fileName);
+            savedCategory = categoryService.save(category);
 
-        String uploadDir = FileUploadUtil.CATEGORY_UPLOAD_DIRECTORY + savedCategory.getId();
-        FileUploadUtil.cleanDirectory(uploadDir);
-        FileUploadUtil.saveFile(uploadDir,fileName, multipartFile);
+            String uploadDir = FileUploadUtil.CATEGORY_UPLOAD_DIRECTORY + savedCategory.getId();
+            FileUploadUtil.cleanDirectory(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        } else {
+            savedCategory = categoryService.save(category);
+        }
 
         redirectAttributes.addFlashAttribute("message", "The category has been saved successfully.");
-
         return "redirect:" + CATEGORIES_ROOT_REQ_PATH;
     }
 
+    @GetMapping("/edit/{id}")
+    public String editCategory(@PathVariable(name = "id") Integer id,
+                           Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Category category = categoryService.findById(id);
+
+            List<Category> listCategories = categoryService.listAllCategoriesUsedInForm();
+
+            model.addAttribute("category", category);
+            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("pageTitle", "Edit Category (ID : " + id + ")");
+            return CATEGORY_FORM_REQ_PATH;
+        } catch (CategoryNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+            return "redirect:" + CATEGORIES_ROOT_REQ_PATH;
+        }
+    }
 
     @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public void exportToCSV(HttpServletResponse response) {

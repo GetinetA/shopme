@@ -71,7 +71,7 @@
                            th:if="${category.enabled == false}"></a>
                     </td>
                     <td>
-                        <a class="fas fa-edit fa-2x icon-green"
+                        <a th:href="@{'/categories/edit/' + ${category.id}}"  class="fas fa-edit fa-2x icon-green"
                            title="Edit this category"/>
                         <a class="fas fa-trash fa-2x icon-dark link-delete"
                            title="Delete this category" />

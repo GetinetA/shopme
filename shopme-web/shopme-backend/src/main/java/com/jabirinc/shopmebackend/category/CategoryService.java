@@ -1,13 +1,14 @@
 package com.jabirinc.shopmebackend.category;
 
+import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -24,11 +25,18 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    public Category findById(Integer id) {
+        try {
+            return categoryRepository.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new CategoryNotFoundException("Could not find any category with ID " + id);
+        }
+    }
+
     public List<Category> findAll() {
 
         List<Category> rootCategories = categoryRepository.listRootCategories();
         return listHierarchicalCategories(rootCategories);
-        //return (List<Category>) categoryRepository.findAll(Sort.by("name").ascending());
     }
 
     private List<Category> listHierarchicalCategories(List<Category> rootCategories) {
@@ -109,4 +117,5 @@ public class CategoryService {
             listChildren(categoriesUsedInform, subCategory, newSubLevel);
         }
     }
+
 }

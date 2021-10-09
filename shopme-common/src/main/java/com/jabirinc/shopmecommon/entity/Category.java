@@ -23,6 +23,7 @@ public class Category {
 
     public static final String DEFAULT_CATEGORY_IMAGE_NAME = "image-thumbnail.png";
     public static final String DEFAULT_CATEGORY_IMAGE_PATH = "/images/" + DEFAULT_CATEGORY_IMAGE_NAME;
+    public static final String CATEGORY_IMAGES_DIR = "/category-images/";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,9 +91,9 @@ public class Category {
     @Transient
     public String getCategoryImagePath() {
 
-        if (id == null || image == null || "default.png".equalsIgnoreCase(image)) {
+        if (id == null || "default.png".equalsIgnoreCase(image)) {
             return DEFAULT_CATEGORY_IMAGE_PATH;
         }
-        return "/category-images/" + this.id + "/" + this.image;
+        return CATEGORY_IMAGES_DIR + this.id + "/" + this.image;
     }
 }
