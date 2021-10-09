@@ -73,10 +73,24 @@ public class Category {
         return copyCategory;
     }
 
+    public static Category deepCopy(Category category) {
+        Category copyCategory = new Category();
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
+        copyCategory.setAlias(category.getAlias());
+        copyCategory.setImage(category.getImage());
+        copyCategory.setEnabled(category.isEnabled());
+        if (category.getParent() != null) {
+            copyCategory.setParent(deepCopy(category.getParent()));
+        }
+
+        return copyCategory;
+    }
+
     @Transient
     public String getCategoryImagePath() {
 
-        if (id == null || image == null) {
+        if (id == null || image == null || "default.png".equalsIgnoreCase(image)) {
             return DEFAULT_CATEGORY_IMAGE_PATH;
         }
         return "/category-images/" + this.id + "/" + this.image;

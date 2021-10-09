@@ -17,6 +17,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
+        /** Users photo resource **/
         Path userPhotosDir = Paths.get(FileUploadUtil.USER_UPLOAD_FOLDER);
         String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
 
@@ -25,6 +26,14 @@ public class WebMVCConfig implements WebMvcConfigurer {
         // syntax information https://en.wikipedia.org/wiki/File_URI_scheme
         registry.addResourceHandler("/" + FileUploadUtil.USER_UPLOAD_FOLDER + "/**")
                 .addResourceLocations("file:" + userPhotosPath + "/");
+
+
+        /** Categories image resource **/
+        Path categoryImagesDir = Paths.get(FileUploadUtil.CATEGORY_UPLOAD_FOLDER);
+        String categoryImagesPath = categoryImagesDir.toFile().getAbsolutePath();
+
+        registry.addResourceHandler("/" + FileUploadUtil.CATEGORY_UPLOAD_FOLDER + "/**")
+                .addResourceLocations("file:" + categoryImagesPath + "/");
 
     }
 }

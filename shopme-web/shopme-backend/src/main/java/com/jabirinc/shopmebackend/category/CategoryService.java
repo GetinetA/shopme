@@ -25,7 +25,51 @@ public class CategoryService {
     }
 
     public List<Category> findAll() {
-        return (List<Category>) categoryRepository.findAll(Sort.by("name").ascending());
+
+        List<Category> rootCategories = categoryRepository.listRootCategories();
+        return listHierarchicalCategories(rootCategories);
+        //return (List<Category>) categoryRepository.findAll(Sort.by("name").ascending());
+    }
+
+    private List<Category> listHierarchicalCategories(List<Category> rootCategories) {
+
+        List<Category> hierarchicalCategories = new ArrayList<>();
+        for(Category rootCategory : rootCategories) {
+            hierarchicalCategories.add(Category.deepCopy(rootCategory));
+
+            Set<Category> children = rootCategory.getChildren();
+            for(Category subCategory : children) {
+                Category copySubCategory = Category.deepCopy(subCategory);
+                copySubCategory.setName("--" + copySubCategory.getName());
+                hierarchicalCategories.add(copySubCategory);
+                listSubHierarchicalCategories(hierarchicalCategories, subCategory, 1);
+            }
+        }
+
+        return hierarchicalCategories;
+    }
+
+    private void listSubHierarchicalCategories(List<Category> hierarchicalCategories,
+                                               Category parent, int subLevel) {
+        int newSubLevel = subLevel + 1;
+        Set<Category> children = parent.getChildren();
+
+        for(Category subCategory : children) {
+            String name = "";
+            for (int i = 0; i < newSubLevel; i++) {
+                name += "--";
+            }
+            name += subCategory.getName();
+            Category copySubCategory = Category.deepCopy(subCategory);
+            copySubCategory.setName(name);
+            hierarchicalCategories.add(copySubCategory);
+
+            listSubHierarchicalCategories(hierarchicalCategories, subCategory, newSubLevel);
+        }
+    }
+
+    public Category save(Category category) {
+        return categoryRepository.save(category);
     }
 
     public List<Category> listAllCategoriesUsedInForm() {
@@ -64,9 +108,5 @@ public class CategoryService {
             categoriesUsedInform.add(Category.create(subCategory.getId(), name + subCategory.getName()));
             listChildren(categoriesUsedInform, subCategory, newSubLevel);
         }
-    }
-
-    public Category save(Category category) {
-        return categoryRepository.save(category);
     }
 }

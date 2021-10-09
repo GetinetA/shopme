@@ -1,7 +1,6 @@
 package com.jabirinc.shopmebackend.category;
 
 import com.jabirinc.shopmecommon.entity.Category;
-import com.sun.tools.javac.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -71,7 +73,11 @@ class CategoryRepositoryTest {
 
         Category parent = new Category(7);
         Category camerasSubCategory = new Category("iPhones", parent);
-        Iterable<Category> savedCategories = categoryRepository.saveAll(List.of(camerasSubCategory));
+        // Java 9
+        //Iterable<Category> savedCategories = categoryRepository.saveAll(List.of(camerasSubCategory));
+        // Java 8
+        Iterable<Category> savedCategories = categoryRepository.saveAll(
+                Stream.of(camerasSubCategory).collect(Collectors.toList()));
         Assertions.assertThat(savedCategories.iterator().hasNext()).isTrue();
     }
 
@@ -118,6 +124,15 @@ class CategoryRepositoryTest {
             System.out.println(subCategory.getName());
             printChildren(subCategory, newSubLevel);
         }
+    }
+
+    @Test
+    public void testListRootCategories() {
+
+        List<Category> rootCategories = categoryRepository.listRootCategories();
+        rootCategories.forEach(category -> System.out.println(category.getName()));
+        Assertions.assertThat(rootCategories.size()).isGreaterThan(1);
+        Assertions.assertThat(rootCategories.size()).isEqualTo(3);
     }
 
     @AfterEach
