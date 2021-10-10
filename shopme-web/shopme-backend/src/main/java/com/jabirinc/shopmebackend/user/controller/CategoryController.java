@@ -109,6 +109,19 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/{id}/enabled/{status}")
+    public String UpdateCategoryEenabledStatus(@PathVariable(name = "id") Integer id,
+                                           @PathVariable(name = "status") boolean enabled,
+                                           RedirectAttributes redirectAttributes) {
+
+        categoryService.updateEnabledStatus(id, enabled);
+        String status = enabled? "enabled":"disabled";
+        redirectAttributes.addFlashAttribute("message",
+                "The category with ID " + id + " has been " + status);
+
+        return "redirect:" + CATEGORIES_ROOT_REQ_PATH;
+    }
+
     @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public void exportToCSV(HttpServletResponse response) {
 

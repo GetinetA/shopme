@@ -28,6 +28,20 @@
         [[${label}]]
     </a>
 
+    <div th:fragment="enabled_status(path, id, currentStatus)" th:remove="tag" >
+        <a class="fas fa-check-circle fa-2x icon-green" th:if="${currentStatus == true}"
+           th:href="@{${path} + ${id} + '/enabled/false'}" ></a>
+        <a class="fas fa-circle fa-2x icon-dark" th:if="${currentStatus == false}"
+           th:href="@{${path} + ${id} + '/enabled/true'}" ></a>
+    </div>
+    <div th:fragment="tableRow_actions(path, id, objectName)" th:remove="tag" >
+        <a th:href="@{${path} + 'edit/' + ${id}}"  class="fas fa-edit fa-2x icon-green"
+           th:title="'Edit this ' + ${objectName}"/>
+
+        <a th:href="@{${path} + 'delete/' + ${id}}" class="fas fa-trash fa-2x icon-dark link-delete"
+           th:title="'Delete this ' + ${objectName}" th:userId="${id}"/>
+    </div>
+
     <div th:fragment="footer" class="text-center">
         <p>Shopme Control panel - Copyright &copy; Shopme</p>
     </div>

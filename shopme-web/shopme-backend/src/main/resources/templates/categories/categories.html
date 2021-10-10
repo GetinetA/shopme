@@ -63,16 +63,10 @@
                     <td>[[${category.alias}]]</td>
 
                     <td>
-                        <a class="fas fa-check-circle fa-2x icon-green"
-                           th:if="${category.enabled == true}"></a>
-                        <a class="fas fa-circle fa-2x icon-dark"
-                           th:if="${category.enabled == false}"></a>
+                        <div th:replace="fragments::enabled_status('/categories/', ${category.id}, ${category.enabled})" />
                     </td>
                     <td>
-                        <a th:href="@{'/categories/edit/' + ${category.id}}"  class="fas fa-edit fa-2x icon-green"
-                           title="Edit this category"/>
-                        <a class="fas fa-trash fa-2x icon-dark link-delete"
-                           title="Delete this category" />
+                        <div th:replace="fragments::tableRow_actions('/categories/', ${category.id}, 'category')" />
                     </td>
                 </tr>
             </tbody>

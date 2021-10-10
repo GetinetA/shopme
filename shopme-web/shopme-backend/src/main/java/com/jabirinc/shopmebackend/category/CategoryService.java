@@ -174,20 +174,7 @@ public class CategoryService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void updateEnabledStatus(Integer id, boolean enabled) {
+        categoryRepository.updateEnabledStatus(id, enabled);
+    }
 }

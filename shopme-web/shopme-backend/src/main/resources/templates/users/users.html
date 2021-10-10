@@ -70,18 +70,10 @@
                     <td>[[${user.lastName}]]</td>
                     <td>[[${user.roles}]]</td>
                     <td>
-                        <a class="fas fa-check-circle fa-2x icon-green"
-                           th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
-                           th:if="${user.enabled == true}"></a>
-                        <a class="fas fa-circle fa-2x icon-dark"
-                           th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
-                           th:if="${user.enabled == false}"></a>
+                        <div th:replace="fragments::enabled_status('/users/', ${user.id}, ${user.enabled})" />
                     </td>
                     <td>
-                        <a th:href="@{'/users/edit/' + ${user.id}}" class="fas fa-edit fa-2x icon-green"
-                           title="Edit this user"/>
-                        <a th:href="@{'/users/delete/' + ${user.id}}" class="fas fa-trash fa-2x icon-dark link-delete"
-                           title="Delete this user" th:userId="${user.id}"/>
+                        <div th:replace="fragments::tableRow_actions('/users/', ${user.id}, 'user')" />
                     </td>
                 </tr>
             </tbody>
