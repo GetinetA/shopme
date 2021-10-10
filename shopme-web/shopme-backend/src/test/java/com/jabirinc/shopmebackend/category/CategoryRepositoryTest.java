@@ -135,6 +135,32 @@ class CategoryRepositoryTest {
         Assertions.assertThat(rootCategories.size()).isEqualTo(3);
     }
 
+    @Test
+    public void testFindByName() {
+        String name = "Computers";
+        String name2 = "Dresses";
+        Category category = categoryRepository.findByName(name);
+        Category category2 = categoryRepository.findByName(name2);
+
+        Assertions.assertThat(category).isNotNull();
+        Assertions.assertThat(category.getName()).isEqualTo(name);
+
+        Assertions.assertThat(category2).isNull();
+    }
+
+    @Test
+    public void testFindByAlias() {
+        String alias = "laptops";
+        String alias2 = "dresses";
+        Category category = categoryRepository.findByAlias(alias);
+        Category category2 = categoryRepository.findByAlias(alias2);
+
+        Assertions.assertThat(category).isNotNull();
+        Assertions.assertThat(category.getAlias()).isEqualTo(alias);
+
+        Assertions.assertThat(category2).isNull();
+    }
+
     @AfterEach
     void tearDown() {
     }

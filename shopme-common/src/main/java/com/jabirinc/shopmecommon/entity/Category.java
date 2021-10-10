@@ -1,9 +1,6 @@
 package com.jabirinc.shopmecommon.entity;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -67,9 +64,14 @@ public class Category {
     }
 
     public static Category create(Integer id, String name) {
+        return Category.create(id, name, null);
+    }
+
+    public static Category create(Integer id, String name, String alias) {
         Category copyCategory = new Category();
         copyCategory.setId(id);
         copyCategory.setName(name);
+        copyCategory.setAlias(alias);
 
         return copyCategory;
     }
