@@ -10,6 +10,7 @@ import com.jabirinc.shopmecommon.entity.Category;
 import com.jabirinc.shopmecommon.entity.Role;
 import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -41,10 +42,19 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public String listCategories(Model model) {
+    public String listCategories(Model model, @Param("sortDir") String sortDir) {
 
-        List<Category> listCategories = categoryService.findAll();
+        if (sortDir == null || sortDir.isEmpty()) {
+            sortDir = CategoryService.SORT_ASC;
+        }
+
+        String reverseSortDir = sortDir.equalsIgnoreCase(CategoryService.SORT_ASC) ?
+                CategoryService.SORT_DESC : CategoryService.SORT_ASC;
+
+        List<Category> listCategories = categoryService.findAll(sortDir);
         model.addAttribute("listCategories", listCategories);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", reverseSortDir);
         return CATEGORIES_REQ_PATH;
     }
 
@@ -102,19 +112,19 @@ public class CategoryController {
     @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public void exportToCSV(HttpServletResponse response) {
 
-        List<Category> listCategories = categoryService.findAll();
+        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
     }
 
     @GetMapping(value = "/export/excel")
     public void exportToExcel(HttpServletResponse response) {
 
-        List<Category> listCategories = categoryService.findAll();
+        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
     }
 
     @GetMapping(value = "/export/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public void exportToPdf(HttpServletResponse response) {
 
-        List<Category> listCategories = categoryService.findAll();
+        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
     }
 
 }

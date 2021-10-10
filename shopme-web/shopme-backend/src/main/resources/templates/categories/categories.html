@@ -39,18 +39,16 @@
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
-            <thead class="table-dark">
+            <thead class="thead-dark">
                 <tr>
-                    <th class="hideable-column">
-                        <th th:replace="fragments::column_link('id', 'ID', 'tag')" />
-                    </th>
+                    <th>ID</th>
                     <th>Category Image</th>
-                    <th class="hideable-column">
-                        <th th:replace="fragments::column_link('name', 'Category Name', 'tag')" />
+                    <th>
+                        <a th:href="@{'/categories?sortDir=' + ${reverseSortDir}}" class="text-white">Category Name</a>
+                        <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
                     </th>
-                    <th th:replace="fragments::column_link('alias', 'Alias', 'none')" />
-
-                    <th th:replace="fragments::column_link('enabled', 'Enabled', 'none')" />
+                    <th>Alias</th>
+                    <th>Enabled</th>
                     <th></th>
                 </tr>
             </thead>
