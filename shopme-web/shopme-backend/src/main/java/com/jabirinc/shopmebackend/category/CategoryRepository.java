@@ -22,6 +22,9 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     @Query("SELECT c FROM Category c WHERE c.parent is NULL")
     Page<Category> listRootCategories(Pageable pageable);
 
+    @Query("SELECT c FROM Category c WHERE c.name LIKE %?1%")
+    Page<Category> search(String keyword, Pageable pageable);
+
     Category findByName(String name);
 
     Category findByAlias(String name);

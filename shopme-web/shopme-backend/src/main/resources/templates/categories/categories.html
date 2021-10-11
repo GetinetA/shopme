@@ -22,20 +22,7 @@
         [[${message}]]
     </div>
 
-    <di>
-        <form class="form-inline m-3" th:action="@{/categories/page/1}">
-
-            <span class="mr-1">Filter</span>
-            <input type="search" name="keyword" th:value="${keyword}" class="form-control mr-1" required />
-
-            <button type="submit" class="btn btn-primary ml-1" title="Search" >
-                <i class="fas fa-search"></i>
-            </button>
-            <button type="button" class="btn btn-secondary ml-1" title="Clear" onclick="clearFilter();">
-                <i class="fas fa-eraser"></i>
-            </button>
-        </form>
-    </di>
+    <div th:replace="fragments::search_form('/categories/page/1')" />
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
@@ -76,7 +63,14 @@
         </table>
     </div>
 
-    <div th:replace="fragments::pagination('/categories', 'category')" />
+    <div th:if="${keyword != null}" class="text-center">
+        <span>Search result does not show categories in hierarchical form</span>
+        <div th:replace="fragments::pagination('/categories', 'categories')" />
+    </div>
+    <th:block th:unless="${keyword != null}">
+        <div th:replace="fragments::pagination('/categories', 'top-level categories')" />
+    </th:block>
+
 
     <div th:replace="modal_fragments::delete_dialog()" />
 
