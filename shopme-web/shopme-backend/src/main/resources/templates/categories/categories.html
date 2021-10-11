@@ -18,11 +18,7 @@
         <a th:href="@{/categories/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark mr-2" title="Export to PDF"></a>
     </div>
 
-    <div th:if="${message != null}" class="alert alert-success text-center" >
-        [[${message}]]
-    </div>
-
-    <div th:replace="fragments::search_form('/categories/page/1')" />
+    <div th:replace="fragments::search_formAndMessage('/categories/page/1')" />
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
