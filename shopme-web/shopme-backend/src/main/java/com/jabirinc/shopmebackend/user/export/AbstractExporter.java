@@ -15,8 +15,12 @@ public abstract class AbstractExporter<T> {
             new String[]{"User Id", "Email", "First Name", "Last Name", "Roles", "Enabled"};
     public static final String[] USERS_EXPORT_FIELDS =
             new String[] {"id", "email", "firstName", "lastName", "roles", "enabled"};
+    public static final String EXPORT_USERS_PREFIX = "users_";
 
-    public static final String EXPORT_FILE_PREFIX = "users_";
+    public static final String[] CATEGORIES_EXPORT_LABELS = new String[]{"Category Id", "Category Name"};
+    public static final String[] CATEGORIES_EXPORT_FIELDS = new String[] {"id", "name"};
+    public static final String EXPORT_CATEGORY_PREFIX = "categories_";
+
     public static final String CSV_FILE_EXT = ".csv";
     public static final String EXCEL_FILE_EXT = ".xlsx";
     public static final String PDF_FILE_EXT = ".pdf";
@@ -32,13 +36,13 @@ public abstract class AbstractExporter<T> {
         response.setHeader(headerKey, headerValue);
     }
 
-    public String createFileName(String fileExtension) {
+    public String createFileName(String fileExtension, String filePrefix) {
 
         StringBuilder fileNameBuffer = new StringBuilder();
         DateFormat dateFormat = new SimpleDateFormat(FILE_NAME_DATE_FORMAT);
 
         String timestamp = dateFormat.format(new Date());
-        fileNameBuffer.append(EXPORT_FILE_PREFIX);
+        fileNameBuffer.append(filePrefix);
         fileNameBuffer.append(timestamp);
         fileNameBuffer.append(fileExtension);
 

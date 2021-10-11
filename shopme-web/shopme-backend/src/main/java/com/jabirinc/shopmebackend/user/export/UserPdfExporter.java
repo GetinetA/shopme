@@ -27,7 +27,7 @@ public class UserPdfExporter extends AbstractExporter<User> {
 
         try (Document document = new Document(PageSize.A4)) {
 
-            fileName = super.createFileName(AbstractExporter.PDF_FILE_EXT);
+            fileName = super.createFileName(AbstractExporter.PDF_FILE_EXT, AbstractExporter.EXPORT_USERS_PREFIX);
             super.setResponseHeader(response, MediaType.APPLICATION_PDF_VALUE, fileName);
 
             PdfWriter.getInstance(document, response.getOutputStream());

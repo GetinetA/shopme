@@ -5,8 +5,11 @@ import com.jabirinc.shopmebackend.category.CategoryService;
 import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
 import com.jabirinc.shopmebackend.user.export.AbstractExporter;
+import com.jabirinc.shopmebackend.user.export.CategoryCsvExporter;
+import com.jabirinc.shopmebackend.user.export.UserCsvExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Category;
+import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
@@ -164,19 +167,22 @@ public class CategoryController {
     @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public void exportToCSV(HttpServletResponse response) {
 
-        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
+        List<Category> listOfCategories = categoryService.listAllCategoriesUsedInForm();
+
+        CategoryCsvExporter categoryCsvExporter = new CategoryCsvExporter();
+        categoryCsvExporter.export(listOfCategories, response);
     }
 
     @GetMapping(value = "/export/excel")
     public void exportToExcel(HttpServletResponse response) {
 
-        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
+        //implement as needed;
     }
 
     @GetMapping(value = "/export/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public void exportToPdf(HttpServletResponse response) {
 
-        //List<Category> listCategories = categoryService.findAll(CategoryService.SORT_ASC);
+        //implement as needed;
     }
 
 }

@@ -40,7 +40,7 @@ public class UserExcelExporter extends AbstractExporter<User> {
 
         try(XSSFWorkbook workbook = new XSSFWorkbook(); ServletOutputStream outputStream = response.getOutputStream()) {
 
-            fileName = super.createFileName(AbstractExporter.EXCEL_FILE_EXT);
+            fileName = super.createFileName(AbstractExporter.EXCEL_FILE_EXT, AbstractExporter.EXPORT_USERS_PREFIX);
             super.setResponseHeader(response, MediaType.APPLICATION_OCTET_STREAM_VALUE, fileName);
 
             styles = createStyles(workbook);
