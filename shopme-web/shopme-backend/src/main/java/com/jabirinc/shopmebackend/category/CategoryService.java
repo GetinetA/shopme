@@ -1,6 +1,7 @@
 package com.jabirinc.shopmebackend.category;
 
 import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
+import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -177,4 +178,14 @@ public class CategoryService {
     public void updateEnabledStatus(Integer id, boolean enabled) {
         categoryRepository.updateEnabledStatus(id, enabled);
     }
+
+    public void delete(Integer id) throws CategoryNotFoundException {
+
+        Long countById = categoryRepository.countById(id);
+        if (countById == null) {
+            throw new CategoryNotFoundException("Could not find any category with ID " + id);
+        }
+        categoryRepository.deleteById(id);
+    }
+
 }

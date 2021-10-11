@@ -122,6 +122,23 @@ public class CategoryController {
         return "redirect:" + CATEGORIES_ROOT_REQ_PATH;
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.delete(id);
+
+            String uploadDir = FileUploadUtil.CATEGORY_UPLOAD_DIRECTORY + id;
+            FileUploadUtil.removeDirectory(uploadDir);
+
+            redirectAttributes.addFlashAttribute("message",
+                    "The category ID " + id + " has been deleted successfully");
+        } catch (CategoryNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:" + CATEGORIES_ROOT_REQ_PATH;
+    }
+
     @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
     public void exportToCSV(HttpServletResponse response) {
 

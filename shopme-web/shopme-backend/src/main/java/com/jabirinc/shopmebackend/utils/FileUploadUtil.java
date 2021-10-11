@@ -67,4 +67,18 @@ public class FileUploadUtil {
             LOGGER.error("Could not list directory: " + dirPath); // using static variable
         }
     }
+
+    public static void removeDirectory(String dir) {
+
+        cleanDirectory(dir);
+
+        try {
+            Files.delete(Paths.get(dir));
+
+        } catch (IOException e) {
+            //System.out.println("Could not list directory: " + dirPath);
+            log.error("Could not list directory: " + dir); // using lombok
+            LOGGER.error("Could not list directory: " + dir); // using static variable
+        }
+    }
 }

@@ -66,21 +66,21 @@
                         <div th:replace="fragments::enabled_status('/categories/', ${category.id}, ${category.enabled})" />
                     </td>
                     <td>
-                        <div th:replace="fragments::tableRow_actions('/categories/', ${category.id}, 'category')" />
+                        <div th:replace="fragments::tableRow_actions('/categories/', ${category.id}, 'category', ${not category.hasChildren})" />
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <div th:replace="modal_fragments::delete_dialog()" />
+
     <div th:replace="fragments::footer" />
 
 </div>
 <script type="text/javascript">
-    function clearFilter() {
-        window.location = "[[@{/categories}]]";
-    }
+    moduleListURL = "[[@{/categories}]]";
 </script>
-
+<script th:src="@{/js/common_list.js}"></script>
 </body>
 </html>

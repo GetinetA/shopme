@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // here the Thymeleaf syntax isn't parsed dynamically ("[[@{/users}]]"), so declare var inside
+    // here the Thymeleaf syntax isn't parsed dynamically ("[[@{/}]]"), so declare var inside
     // the page and use it here - moduleURL
     $("#btnCancel").on("click", function (){
         window.location = moduleURL;

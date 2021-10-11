@@ -83,6 +83,7 @@ public class Category {
         copyCategory.setAlias(category.getAlias());
         copyCategory.setImage(category.getImage());
         copyCategory.setEnabled(category.isEnabled());
+        copyCategory.setHasChildren(category.getChildren().size() > 0);
         if (category.getParent() != null) {
             copyCategory.setParent(deepCopy(category.getParent()));
         }
@@ -98,4 +99,7 @@ public class Category {
         }
         return CATEGORY_IMAGES_DIR + this.id + "/" + this.image;
     }
+
+    @Transient
+    public boolean hasChildren;
 }

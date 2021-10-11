@@ -34,12 +34,15 @@
         <a class="fas fa-circle fa-2x icon-dark" th:if="${currentStatus == false}"
            th:href="@{${path} + ${id} + '/enabled/true'}" ></a>
     </div>
-    <div th:fragment="tableRow_actions(path, id, objectName)" th:remove="tag" >
+    <div th:fragment="tableRow_actions(path, id, entityName, showDelete)" th:remove="tag" >
         <a th:href="@{${path} + 'edit/' + ${id}}"  class="fas fa-edit fa-2x icon-green"
-           th:title="'Edit this ' + ${objectName}"/>
+           th:title="'Edit this ' + ${entityName}"></a>
 
-        <a th:href="@{${path} + 'delete/' + ${id}}" class="fas fa-trash fa-2x icon-dark link-delete"
-           th:title="'Delete this ' + ${objectName}" th:userId="${id}"/>
+        <th:block th:if="${showDelete}">
+            <a th:href="@{${path} + 'delete/' + ${id}}" class="fas fa-trash fa-2x icon-dark link-delete"
+               th:title="'Delete this ' + ${entityName}" th:entityId="${id}" th:entityName="${entityName}"
+            ></a>
+        </th:block>
     </div>
 
     <div th:fragment="footer" class="text-center">
