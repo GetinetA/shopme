@@ -31,27 +31,19 @@
                     <th>ID</th>
                     <th>Category Image</th>
                     <th th:replace="fragments::column_link('/categories', 'name', 'Category Name', 'none')" />
-                    <th>
-                        <a th:href="@{'/categories?sortDir=' + ${reverseSortDir}}" class="text-white">
-                            Category Name
-                        </a>
-                        <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-                    </th>
-                    <th>Alias</th>
+                    <th class="hideable-column">Alias</th>
                     <th>Enabled</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="category : ${listCategories}" >
-                    <td class="hideable-column" >[[${category.id}]]</td>
+                    <td>[[${category.id}]]</td>
                     <td>
-                        <img th:src="@{${category.categoryImagePath}}" class="img-fluid"
-                             style="width: 100px;"/>
+                        <img th:src="@{${category.categoryImagePath}}" class="img-fluid" style="width: 100px;"/>
                     </td>
                     <td>[[${category.name}]]</td>
-                    <td>[[${category.alias}]]</td>
-
+                    <td class="hideable-column" >[[${category.alias}]]</td>
                     <td>
                         <div th:replace="fragments::enabled_status('/categories/', ${category.id}, ${category.enabled})" />
                     </td>
@@ -61,6 +53,31 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="less-details">
+        <div th:each="category : ${listCategories}" class="row m-1">
+            <div class="col-4">
+                <!--<i th:if="${category.image == null}" class="fas fa-portrait fa-3x icon-silver"></i>-->
+                <img th:src="@{${category.categoryImagePath}}" style="width: 100px;"/>
+            </div>
+            <div class="col-8">
+                <div>[[${category.name}]]</div>
+                <div class="mt-2">
+                    <a class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
+                       th:if="${category.enabled == true}"></a>
+                    <a class="fas fa-circle fa-2x icon-dark"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
+                       th:if="${category.enabled == false}"></a>
+
+                    <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green ml-1"
+                       title="Edit this user"></a>
+                    <a th:href="@{'/categories/delete/' + ${category.id}}" class="fas fa-trash fa-2x icon-dark ml-1 link-delete"
+                       title="Delete this user" th:userId="${category.id}"></a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div th:if="${keyword != null}" class="text-center">
