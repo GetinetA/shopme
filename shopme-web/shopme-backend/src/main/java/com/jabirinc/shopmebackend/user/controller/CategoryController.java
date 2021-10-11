@@ -1,14 +1,12 @@
 package com.jabirinc.shopmebackend.user.controller;
 
+import com.jabirinc.shopmebackend.category.CategoryPageInfo;
 import com.jabirinc.shopmebackend.category.CategoryService;
 import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
-import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmebackend.user.export.AbstractExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Category;
-import com.jabirinc.shopmecommon.entity.Role;
-import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
@@ -44,16 +42,38 @@ public class CategoryController {
     @GetMapping()
     public String listCategories(Model model, @Param("sortDir") String sortDir) {
 
+        return listByPage(model, 1, sortDir);
+    }
+
+    @GetMapping("/page/{pageNum}")
+    public String listByPage(Model model, @PathVariable(name = "pageNum") int pageNum,
+                             @Param("sortDir") String sortDir) {
+
         if (sortDir == null || sortDir.isEmpty()) {
             sortDir = CategoryService.SORT_ASC;
+        }
+
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
+
+        List<Category> listCategories = categoryService.listByPage(pageInfo, pageNum, sortDir);
+
+        long startCount = (pageNum - 1) * CategoryService.CATEGORY_PER_PAGE + 1;
+        long endCount = startCount + CategoryService.CATEGORY_PER_PAGE - 1;
+        if (endCount > pageInfo.getTotalElements()) {
+            endCount = pageInfo.getTotalElements();
         }
 
         String reverseSortDir = sortDir.equalsIgnoreCase(CategoryService.SORT_ASC) ?
                 CategoryService.SORT_DESC : CategoryService.SORT_ASC;
 
-        List<Category> listCategories = categoryService.findAll(sortDir);
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortField", CategoryService.DEFAULT_SORT_PROP);
         model.addAttribute("reverseSortDir", reverseSortDir);
         return CATEGORIES_REQ_PATH;
     }

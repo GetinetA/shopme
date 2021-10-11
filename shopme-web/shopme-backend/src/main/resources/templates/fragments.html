@@ -13,18 +13,18 @@
     <script type="text/javascript" th:src="@{/js/common.js}" ></script>
 </head>
 <body>
-    <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}" >
+    <th th:fragment="column_link(moduleBaseURL, fieldName, columnLabel, removeTag)" th:remove="${removeTag}" >
         <a class="text-white"
-           th:href="@{'/users/page/' + ${currentPage} +'?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : '' } }" >
+           th:href="@{${moduleBaseURL} +'/page/' + ${currentPage} +'?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : '' } }" >
             [[${columnLabel}]]
         </a>
         <span th:if="${sortField == fieldName}"
               th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
     </th>
 
-    <a th:fragment="page_link(pageNum, label)"
+    <a th:fragment="page_link(moduleBaseURL, pageNum, label)"
        class="page-link"
-       th:href="@{'/users/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : '' } }">
+       th:href="@{${moduleBaseURL} +'/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : '' } }">
         [[${label}]]
     </a>
 
@@ -43,6 +43,39 @@
                th:title="'Delete this ' + ${entityName}" th:entityId="${id}" th:entityName="${entityName}"
             ></a>
         </th:block>
+    </div>
+
+    <div th:fragment="pagination(moduleBaseURL, entityName)" th:remove="tag">
+        <div class="text-center m-1" th:if="${totalItems > 0}">
+            <span>Showing [[${entityName}]]s # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+        </div>
+        <div class="text-center m-1" th:unless="${totalItems > 0}">
+            <span>No [[${entityName}]]s found</span>
+        </div>
+        <div th:if="${totalItems > 1}">
+            <nav>
+                <ul class="pagination justify-content-center flex-wrap">
+                    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a th:replace="fragments::page_link(${moduleBaseURL}, 1, 'First')" ></a>
+                    </li>
+                    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a th:replace="fragments::page_link(${moduleBaseURL}, ${currentPage - 1}, 'Previous')" ></a>
+                    </li>
+
+                    <li th:class="${currentPage != index ? 'page-item' : 'page-item active'}"
+                        th:each="index : ${#numbers.sequence(1,totalPages)}">
+                        <a th:replace="fragments::page_link(${moduleBaseURL}, ${index}, ${index})" ></a>
+                    </li>
+
+                    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a th:replace="fragments::page_link(${moduleBaseURL}, ${currentPage + 1}, 'Next')" ></a>
+                    </li>
+                    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a th:replace="fragments::page_link(${moduleBaseURL}, ${totalPages}, 'Last')" ></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 
     <div th:fragment="footer" class="text-center">

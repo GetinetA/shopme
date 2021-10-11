@@ -4,6 +4,9 @@ import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
 import com.jabirinc.shopmebackend.exception.UserNotFoundException;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import java.util.*;
 @Service
 public class CategoryService {
 
+    public static final int CATEGORY_PER_PAGE = 4;
     public static final String SORT_ASC = "asc";
     public static final String SORT_DESC = "desc";
     public static final String DEFAULT_SORT_PROP = "name";
@@ -36,7 +40,7 @@ public class CategoryService {
         }
     }
 
-    public List<Category> findAll(String sortDir) {
+    public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNumber, String sortDir) {
 
         Sort sort = Sort.by(DEFAULT_SORT_PROP);
         if (SORT_ASC.equalsIgnoreCase(sortDir)) {
@@ -44,8 +48,16 @@ public class CategoryService {
         } else if(SORT_DESC.equalsIgnoreCase(sortDir)) {
             sort = sort.descending();
         }
-        List<Category> rootCategories =
-                categoryRepository.listRootCategories(sort);
+
+        // Pageable is zero based
+        Pageable pageable = PageRequest.of(pageNumber - 1, CATEGORY_PER_PAGE, sort);
+
+        Page<Category> pageCategories = categoryRepository.listRootCategories(pageable);
+        List<Category> rootCategories = pageCategories.getContent();
+
+        pageInfo.setTotalPages(pageCategories.getTotalPages());
+        pageInfo.setTotalElements(pageCategories.getTotalElements());
+
         return listHierarchicalCategories(rootCategories, sortDir);
     }
 
