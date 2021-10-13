@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments::page_head('Brands - Shopme Admin')"/>
+<body>
+
+<div class="container-fluid">
+    <div th:replace="navigation::menu"/>
+    <div>
+        <h1>Manage Brands</h1>
+
+        <a th:href="@{/brands/new}" class="fas fa-user-plus fa-2x icon-dark mr-2" title="Create New Brand"></a>
+
+        <a th:href="@{/brands/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2" title="Export to CSV"></a>
+  </div>
+
+    <div th:replace="fragments::search_formAndMessage('/brands/page/1')" />
+
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Brand ID</th>
+                    <th>Logo</th>
+                    <th th:replace="fragments::column_link('/brands', 'name', 'Brand Name', 'none')" />
+                    <th>Categories</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="brand : ${listBrands}" >
+                    <td>[[${brand.id}]]</td>
+                    <td>
+                        <!--<img th:src="@{${brand.brandImagePath}}" class="img-fluid" style="width: 100px;"/>-->
+                    </td>
+                    <td>[[${brand.name}]]</td>
+                    <td>
+                       <th:block th:each="cat : ${brand.categories}" >
+                            <span class="badge badge-secondary">[[${cat.name}]]</span>
+                        </th:block>
+                    </td>
+                    <td>
+                        <div th:replace="fragments::tableRow_actions('/brands/', ${brand.id}, 'brand', true)" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!--<div th:replace="fragments::pagination('/brands', 'brands')" />-->
+
+
+    <div th:replace="modal_fragments::delete_dialog()" />
+
+    <div th:replace="fragments::footer" />
+
+</div>
+<script type="text/javascript">
+    moduleListURL = "[[@{/brands}]]";
+</script>
+<script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>
