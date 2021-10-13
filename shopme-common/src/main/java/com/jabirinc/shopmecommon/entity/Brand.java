@@ -1,8 +1,6 @@
 package com.jabirinc.shopmecommon.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,9 +9,13 @@ import java.util.Set;
 /**
  * Created by Getinet on 10/11/21
  */
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
-@NoArgsConstructor
+
+@ToString(of = {"id", "name", "categories"})
 
 @Entity()
 @Table(name = "brands")
@@ -36,4 +38,5 @@ public class Brand {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+
 }

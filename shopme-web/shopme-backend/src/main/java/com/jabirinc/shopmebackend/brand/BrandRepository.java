@@ -8,4 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * Created by Getinet on 10/11/21
  */
 public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer> {
+
+    Brand findByName(String name);
 }

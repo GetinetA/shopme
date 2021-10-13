@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
+@ToString(of = {"name"})
 
 @Entity()
 @Table(name = "categories")
