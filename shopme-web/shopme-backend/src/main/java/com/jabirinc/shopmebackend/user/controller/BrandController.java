@@ -7,6 +7,9 @@ import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Brand;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -36,11 +39,48 @@ public class BrandController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping("")
+    public String listFirstPage(Model model) {
+
+        return listByPage(model, 1, BrandService.DEFAULT_SORT_PROP, Sort.Direction.ASC.name(), null);
+    }
+
+    /*@GetMapping()
     public String listAll(Model model) {
         List<Brand> listBrands = brandService.listAll();
         model.addAttribute("listBrands", listBrands);
         return BRANDS_REQ_PATH;
+    }*/
+
+    @GetMapping("/page/{pageNum}")
+    public String listByPage(Model model, @PathVariable(name = "pageNum") int pageNum,
+                             @Param("sortField") String sortField, @Param("sortDir") String sortDir,
+                             @Param("keyword") String keyword
+    ) {
+        Page<Brand> page = brandService.listByPage(pageNum, sortField, sortDir, keyword);
+        List<Brand> listBrands = page.getContent();
+
+        long startCount = (pageNum - 1) * BrandService.BRANDS_PER_PAGE + 1;
+        long endCount = startCount + BrandService.BRANDS_PER_PAGE - 1;
+        if (endCount > page.getTotalElements()) {
+            endCount = page.getTotalElements();
+        }
+
+        String reverseSortDir = Sort.Direction.ASC.name().equalsIgnoreCase(sortDir) ?
+                Sort.Direction.DESC.name() : Sort.Direction.ASC.name();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("listBrands", listBrands);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", reverseSortDir);
+        model.addAttribute("keyword", keyword);
+
+        return BRANDS_REQ_PATH; //"users/users";
     }
 
     @GetMapping("/new")

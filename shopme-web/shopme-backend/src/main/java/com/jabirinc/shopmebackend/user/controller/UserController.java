@@ -12,6 +12,7 @@ import com.jabirinc.shopmecommon.entity.Role;
 import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,7 +46,7 @@ public class UserController {
     @GetMapping("/users")
     public String listFirstPage(Model model) {
 
-        return listByPage(1, model, UserService.DEFAULT_SORT_PROP, UserService.SORT_ASC, null);
+        return listByPage(1, model, UserService.DEFAULT_SORT_PROP, Sort.Direction.ASC.name(), null);
     }
 
     @GetMapping("/users/page/{pageNum}")
@@ -62,8 +63,8 @@ public class UserController {
             endCount = page.getTotalElements();
         }
 
-        String reverseSortDir = UserService.SORT_ASC.equalsIgnoreCase(sortDir) ?
-                UserService.SORT_DESC : UserService.SORT_ASC;
+        String reverseSortDir = Sort.Direction.ASC.name().equalsIgnoreCase(sortDir) ?
+                Sort.Direction.DESC.name() : Sort.Direction.ASC.name();
 
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("startCount", startCount);

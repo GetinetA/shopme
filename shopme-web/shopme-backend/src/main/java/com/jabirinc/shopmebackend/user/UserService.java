@@ -24,8 +24,6 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     public static final int USERS_PER_PAGE = 4;
-    public static final String SORT_ASC = "asc";
-    public static final String SORT_DESC = "desc";
     public static final String DEFAULT_SORT_PROP = "firstName";
 
     private final UserRepository userRepository;
@@ -47,11 +45,11 @@ public class UserService {
     public Page<User> listByPage(int pageNumber, String sortField, String sortDir, String keyword) {
 
         Sort sort = Sort.by(sortField);
-        sort = sortDir.equalsIgnoreCase(SORT_ASC) ? sort.ascending() : sort.descending();
+        sort = Sort.Direction.ASC.name().equalsIgnoreCase(sortDir) ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE, sort);
 
         if (keyword != null) {
-            return userRepository.findAll(keyword, pageable);
+            return userRepository.search(keyword, pageable);
         }
 
         return userRepository.findAll(pageable);

@@ -8,6 +8,7 @@ import com.jabirinc.shopmebackend.user.export.CategoryCsvExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,7 @@ public class CategoryController {
                              @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
 
         if (sortDir == null || sortDir.isEmpty()) {
-            sortDir = CategoryService.SORT_ASC;
+            sortDir = Sort.Direction.ASC.name();
         }
 
         CategoryPageInfo pageInfo = new CategoryPageInfo();
@@ -62,8 +63,8 @@ public class CategoryController {
             endCount = pageInfo.getTotalElements();
         }
 
-        String reverseSortDir = sortDir.equalsIgnoreCase(CategoryService.SORT_ASC) ?
-                CategoryService.SORT_DESC : CategoryService.SORT_ASC;
+        String reverseSortDir = Sort.Direction.ASC.name().equalsIgnoreCase(sortDir) ?
+                Sort.Direction.DESC.name() : Sort.Direction.ASC.name();
 
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("startCount", startCount);

@@ -166,7 +166,7 @@ class UserRepositoryTest {
         int pageSize = 4;
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<User> page = userRepository.findAll(keyword, pageable);
+        Page<User> page = userRepository.search(keyword, pageable);
         List<User> listOfUsers = page.getContent();
 
         listOfUsers.forEach(user -> System.out.println(user));

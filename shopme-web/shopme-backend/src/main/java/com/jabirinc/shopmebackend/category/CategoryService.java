@@ -21,8 +21,6 @@ import java.util.*;
 public class CategoryService {
 
     public static final int CATEGORY_PER_PAGE = 4;
-    public static final String SORT_ASC = "asc";
-    public static final String SORT_DESC = "desc";
     public static final String DEFAULT_SORT_PROP = "name";
 
     private final CategoryRepository categoryRepository;
@@ -43,9 +41,9 @@ public class CategoryService {
     public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNumber, String sortDir, String keyword) {
 
         Sort sort = Sort.by(DEFAULT_SORT_PROP);
-        if (SORT_ASC.equalsIgnoreCase(sortDir)) {
+        if (Sort.Direction.ASC.name().equalsIgnoreCase(sortDir)) {
             sort = sort.ascending();
-        } else if(SORT_DESC.equalsIgnoreCase(sortDir)) {
+        } else if(Sort.Direction.DESC.name().equalsIgnoreCase(sortDir)) {
             sort = sort.descending();
         }
 
@@ -180,14 +178,14 @@ public class CategoryService {
     }
 
     private SortedSet<Category> sortSubCategories(Set<Category> children) {
-        return sortSubCategories(children, SORT_ASC);
+        return sortSubCategories(children, Sort.Direction.ASC.name());
     }
     private SortedSet<Category> sortSubCategories(Set<Category> children, String sortDir) {
 
         SortedSet<Category> sortedChildren = new TreeSet<>(new Comparator<Category>() {
             @Override
             public int compare(Category cat1, Category cat2) {
-                if(SORT_ASC.equalsIgnoreCase(sortDir)) {
+                if(Sort.Direction.ASC.name().equalsIgnoreCase(sortDir)) {
                     return cat1.getName().compareTo(cat2.getName());
                 } else {
                     return cat2.getName().compareTo(cat1.getName());
