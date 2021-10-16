@@ -20,7 +20,7 @@ public class CategoryRestController {
     }
 
     @PostMapping("/categories/check_unique")
-    public String checkDuplicateEmail(@Param(value = "id") Integer id,
+    public String checkDuplicateCategory(@Param(value = "id") Integer id,
                                       @Param(value = "name") String name, @Param(value = "alias") String alias) {
         return categoryService.isCategoryUnique(id, name, alias);
     }

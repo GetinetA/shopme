@@ -92,6 +92,29 @@
             chosenCategories.append("<span class='badge badge-secondary m-1'>" + catName + "</span>");
         });
     }
+
+    function checkUnique(form) {
+
+        var url = "[[@{/brands/check_unique}]]";
+        brandId = $("#id").val();
+        brandName = $("#name").val();
+        csrfValue = $("input[name='_csrf']").val();
+        params = {"id": brandId, "name": brandName, "_csrf": csrfValue};
+
+        $.post(url, params, function (response) {
+            //alert("check brand uniqueness : " + response);
+            if (response == "OK") {
+                form.submit();
+            } else if(response == "Duplicate") {
+                showWarningModalDialog("There is another brand having same name: " + brandName);
+            } else {
+                showErrorModalDialog("Unknown response from server.");
+            }
+        }).fail(function () {
+            showErrorModalDialog("Could not connect to the server.")
+        });
+        return false;
+    }
 </script>
 <script th:src="@{/js/common_form.js}"></script>
 

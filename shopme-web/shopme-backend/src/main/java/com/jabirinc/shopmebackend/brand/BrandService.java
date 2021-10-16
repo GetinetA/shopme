@@ -2,6 +2,7 @@ package com.jabirinc.shopmebackend.brand;
 
 import com.jabirinc.shopmebackend.exception.BrandNotFoundException;
 import com.jabirinc.shopmecommon.entity.Brand;
+import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,21 @@ public class BrandService {
             throw new BrandNotFoundException("Could not find any brand with ID " + id);
         }
         brandRepository.deleteById(id);
+    }
+
+    public String isBrandUnique(Integer id, String name) {
+
+        boolean isCreatingNew = (id == null || id == 0);
+        Brand brandByName = brandRepository.findByName(name);
+        if (isCreatingNew ) {
+            if (brandByName != null) {
+                return "Duplicate";
+            }
+        } else {
+            if (brandByName != null && brandByName.getId() != id) {
+                return "Duplicate";
+            }
+        }
+        return "OK";
     }
 }
