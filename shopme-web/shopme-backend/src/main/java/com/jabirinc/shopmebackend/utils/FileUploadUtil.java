@@ -23,12 +23,15 @@ public class FileUploadUtil {
     public static final String FILE_SEPARATOR = "/";
     public static final String USER_UPLOAD_FOLDER = "user-photos";
     public static final String USER_UPLOAD_DIRECTORY = USER_UPLOAD_FOLDER + FILE_SEPARATOR;
-
     public static final String USER_DEFAULT_IMAGE_PATH = "/images/default-user.png";
 
     public static final String CATEGORY_UPLOAD_FOLDER = "category-images";
     public static final String CATEGORY_UPLOAD_DIRECTORY = CATEGORY_UPLOAD_FOLDER + FILE_SEPARATOR;
     public static final String CATEGORY_DEFAULT_IMAGE_PATH = "/images/image-thumbnail.png";
+
+    public static final String BRAND_UPLOAD_FOLDER = "brand-images";
+    public static final String BRAND_UPLOAD_DIRECTORY = BRAND_UPLOAD_FOLDER + FILE_SEPARATOR;
+    public static final String BRAND_DEFAULT_IMAGE_PATH = "/images/image-thumbnail.png";
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
             throws IOException {

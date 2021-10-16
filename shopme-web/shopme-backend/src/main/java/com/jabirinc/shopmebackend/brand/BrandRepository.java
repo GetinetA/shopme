@@ -10,4 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer> {
 
     Brand findByName(String name);
+
+    Long countById(Integer id);
 }

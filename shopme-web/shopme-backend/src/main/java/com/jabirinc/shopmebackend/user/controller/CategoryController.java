@@ -2,18 +2,14 @@ package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.category.CategoryPageInfo;
 import com.jabirinc.shopmebackend.category.CategoryService;
-import com.jabirinc.shopmebackend.config.ShopmeUserDetails;
 import com.jabirinc.shopmebackend.exception.CategoryNotFoundException;
 import com.jabirinc.shopmebackend.user.export.AbstractExporter;
 import com.jabirinc.shopmebackend.user.export.CategoryCsvExporter;
-import com.jabirinc.shopmebackend.user.export.UserCsvExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Category;
-import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -95,7 +91,6 @@ public class CategoryController {
 
     @PostMapping("/save")
     public String saveUser(Category category, RedirectAttributes redirectAttributes,
-                           @AuthenticationPrincipal ShopmeUserDetails loggedUser,
                            @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
 
         Category savedCategory;
@@ -148,7 +143,7 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id,
+    public String deleteCategory(@PathVariable(name = "id") Integer id,
                              RedirectAttributes redirectAttributes) {
         try {
             categoryService.delete(id);

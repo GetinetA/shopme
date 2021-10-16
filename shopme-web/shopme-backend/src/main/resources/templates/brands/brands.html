@@ -31,7 +31,7 @@
                 <tr th:each="brand : ${listBrands}" >
                     <td>[[${brand.id}]]</td>
                     <td>
-                        <!--<img th:src="@{${brand.brandImagePath}}" class="img-fluid" style="width: 100px;"/>-->
+                        <img th:src="@{${brand.brandImagePath}}" class="img-fluid" style="width: 100px;"/>
                     </td>
                     <td>[[${brand.name}]]</td>
                     <td>
@@ -47,9 +47,7 @@
         </table>
     </div>
 
-
     <!--<div th:replace="fragments::pagination('/brands', 'brands')" />-->
-
 
     <div th:replace="modal_fragments::delete_dialog()" />
 

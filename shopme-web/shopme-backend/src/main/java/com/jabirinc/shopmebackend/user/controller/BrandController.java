@@ -2,14 +2,19 @@ package com.jabirinc.shopmebackend.user.controller;
 
 import com.jabirinc.shopmebackend.brand.BrandService;
 import com.jabirinc.shopmebackend.category.CategoryService;
+import com.jabirinc.shopmebackend.exception.BrandNotFoundException;
+import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Brand;
 import com.jabirinc.shopmecommon.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,5 +51,62 @@ public class BrandController {
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Create New Brand");
         return BRAND_FORM_REQ_PATH;
+    }
+
+    @PostMapping("/save")
+    public String saveUser(Brand brand, RedirectAttributes redirectAttributes,
+                           @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+
+        Brand savedBrand;
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            brand.setLogo(fileName);
+            savedBrand = brandService.save(brand);
+
+            String uploadDir = FileUploadUtil.BRAND_UPLOAD_DIRECTORY + savedBrand.getId();
+            FileUploadUtil.cleanDirectory(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        } else {
+            savedBrand = brandService.save(brand);
+        }
+
+        redirectAttributes.addFlashAttribute("message", "The brand has been saved successfully.");
+        return "redirect:" + BRANDS_ROOT_REQ_PATH;
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editBrand(@PathVariable(name = "id") Integer id,
+                               Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Brand brand = brandService.findById(id);
+
+            List<Category> listCategories = categoryService.listAllCategoriesUsedInForm();
+
+            model.addAttribute("brand", brand);
+            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("pageTitle", "Edit Brand (ID : " + id + ")");
+            return BRAND_FORM_REQ_PATH;
+        } catch (BrandNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+            return "redirect:" + BRANDS_ROOT_REQ_PATH;
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteBrand(@PathVariable(name = "id") Integer id,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            brandService.delete(id);
+
+            String uploadDir = FileUploadUtil.BRAND_UPLOAD_DIRECTORY + id;
+            FileUploadUtil.removeDirectory(uploadDir);
+
+            redirectAttributes.addFlashAttribute("message",
+                    "The brand ID " + id + " has been deleted successfully");
+        } catch (BrandNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:" + BRANDS_ROOT_REQ_PATH;
     }
 }
