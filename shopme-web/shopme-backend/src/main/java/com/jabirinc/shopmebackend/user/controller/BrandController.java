@@ -3,6 +3,9 @@ package com.jabirinc.shopmebackend.user.controller;
 import com.jabirinc.shopmebackend.brand.BrandService;
 import com.jabirinc.shopmebackend.category.CategoryService;
 import com.jabirinc.shopmebackend.exception.BrandNotFoundException;
+import com.jabirinc.shopmebackend.user.export.AbstractExporter;
+import com.jabirinc.shopmebackend.user.export.BrandCsvExporter;
+import com.jabirinc.shopmebackend.user.export.CategoryCsvExporter;
 import com.jabirinc.shopmebackend.utils.FileUploadUtil;
 import com.jabirinc.shopmecommon.entity.Brand;
 import com.jabirinc.shopmecommon.entity.Category;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -148,5 +152,14 @@ public class BrandController {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
         return "redirect:" + BRANDS_ROOT_REQ_PATH;
+    }
+
+    @GetMapping(value = "/export/csv", produces = AbstractExporter.CONTENT_TYPE_CSV)
+    public void exportToCSV(HttpServletResponse response) {
+
+        List<Brand> listOfBrands = brandService.listAll();
+
+        BrandCsvExporter brandCsvExporter = new BrandCsvExporter();
+        brandCsvExporter.export(listOfBrands, response);
     }
 }

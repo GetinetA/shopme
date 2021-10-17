@@ -27,30 +27,33 @@ public class WebMVCConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         /** Users photo resource **/
-        Path userPhotosDir = Paths.get(FileUploadUtil.USER_UPLOAD_FOLDER);
-        String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
-
-        // java.net.UnknownHostException: Users in MacOS when using the following
-        // .addResourceLocations("file:/" + userPhotosPath + "/");
-        // syntax information https://en.wikipedia.org/wiki/File_URI_scheme
-        registry.addResourceHandler("/" + FileUploadUtil.USER_UPLOAD_FOLDER + "/**")
-                .addResourceLocations("file:" + userPhotosPath + "/");
+        exposeDirectory(registry, FileUploadUtil.USER_UPLOAD_FOLDER);
 
 
         /** Categories image resource **/
-        Path categoryImagesDir = Paths.get(FileUploadUtil.CATEGORY_UPLOAD_FOLDER);
-        String categoryImagesPath = categoryImagesDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + FileUploadUtil.CATEGORY_UPLOAD_FOLDER + "/**")
-                .addResourceLocations("file:" + categoryImagesPath + "/");
+        exposeDirectory(registry, FileUploadUtil.CATEGORY_UPLOAD_FOLDER);
 
         /** Brands image resource **/
-        Path brandImagesDir = Paths.get(FileUploadUtil.BRAND_UPLOAD_FOLDER);
-        String brandImagesPath = brandImagesDir.toFile().getAbsolutePath();
+        exposeDirectory(registry, FileUploadUtil.BRAND_UPLOAD_FOLDER);
+    }
 
-        registry.addResourceHandler("/" + FileUploadUtil.BRAND_UPLOAD_FOLDER + "/**")
-                .addResourceLocations("file:" + brandImagesPath + "/");
+    /**
+     * Expose directory to the clients
+     * java.net.UnknownHostException: Users in MacOS when using the following
+     *         // .addResourceLocations("file:/" + userPhotosPath + "/");
+     *         // syntax information https://en.wikipedia.org/wiki/File_URI_scheme
+     *
+     * @param registry
+     * @param pathPattern
+     */
+    private void exposeDirectory(ResourceHandlerRegistry registry, String pathPattern) {
+        Path pathDir = Paths.get(pathPattern);
+        String absolutePath = pathDir.toFile().getAbsolutePath();
 
+        String logicalPath = "/" + pathPattern + "/**";
+
+        registry.addResourceHandler(logicalPath)
+                .addResourceLocations("file:" + absolutePath + "/");
     }
 
     @Bean

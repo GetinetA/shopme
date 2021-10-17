@@ -21,6 +21,10 @@ public abstract class AbstractExporter<T> {
     public static final String[] CATEGORIES_EXPORT_FIELDS = new String[] {"id", "name"};
     public static final String EXPORT_CATEGORY_PREFIX = "categories_";
 
+    public static final String[] BRANDS_EXPORT_LABELS = new String[]{"Brand Id", "Brand Name", "Categories"};
+    public static final String[] BRANDS_EXPORT_FIELDS = new String[] {"id", "name", "categories"};
+    public static final String EXPORT_BRAND_PREFIX = "brands_";
+
     public static final String CSV_FILE_EXT = ".csv";
     public static final String EXCEL_FILE_EXT = ".xlsx";
     public static final String PDF_FILE_EXT = ".pdf";
