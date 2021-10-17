@@ -68,9 +68,9 @@
                        th:if="${category.enabled == false}"></a>
 
                     <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green ml-1"
-                       title="Edit this user"></a>
+                       title="Edit this category"></a>
                     <a th:href="@{'/categories/delete/' + ${category.id}}" class="fas fa-trash fa-2x icon-dark ml-1 link-delete"
-                       title="Delete this user" th:userId="${category.id}"></a>
+                       title="Delete this category" th:userId="${category.id}"></a>
                 </div>
             </div>
         </div>
