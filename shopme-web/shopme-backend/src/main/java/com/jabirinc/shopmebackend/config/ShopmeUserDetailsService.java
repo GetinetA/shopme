@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShopmeUserDetailsService implements UserDetailsService {
 
+
     @Autowired
     private UserRepository userRepository;
+
 
     public ShopmeUserDetailsService() {
     }

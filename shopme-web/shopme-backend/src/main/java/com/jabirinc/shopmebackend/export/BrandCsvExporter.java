@@ -1,6 +1,6 @@
-package com.jabirinc.shopmebackend.user.export;
+package com.jabirinc.shopmebackend.export;
 
-import com.jabirinc.shopmecommon.entity.User;
+import com.jabirinc.shopmecommon.entity.Brand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.supercsv.io.CsvBeanWriter;
@@ -13,20 +13,20 @@ import java.util.List;
 /**
  * Created by Getinet on 9/22/21
  */
-public class UserCsvExporter extends AbstractExporter<User> {
+public class BrandCsvExporter extends AbstractExporter<Brand> {
 
     @Override
-    public void export(List<User> listUsers, HttpServletResponse response) {
+    public void export(List<Brand> listBrands, HttpServletResponse response) {
 
         String fileName = null;
         try(CsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);) {
 
-            fileName = super.createFileName(AbstractExporter.CSV_FILE_EXT, AbstractExporter.EXPORT_USERS_PREFIX);
+            fileName = super.createFileName(AbstractExporter.CSV_FILE_EXT, AbstractExporter.EXPORT_BRAND_PREFIX);
             super.setResponseHeader(response, AbstractExporter.CONTENT_TYPE_CSV, fileName);
 
-            csvWriter.writeHeader(AbstractExporter.USERS_EXPORT_LABELS);
-            for (User user : listUsers) {
-                csvWriter.write(user, AbstractExporter.USERS_EXPORT_FIELDS);
+            csvWriter.writeHeader(AbstractExporter.BRANDS_EXPORT_LABELS);
+            for (Brand brand : listBrands) {
+                csvWriter.write(brand, AbstractExporter.BRANDS_EXPORT_FIELDS);
             }
 
         } catch (Exception ex) {

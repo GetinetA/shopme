@@ -1,7 +1,6 @@
-package com.jabirinc.shopmebackend.user.export;
+package com.jabirinc.shopmebackend.export;
 
 import com.jabirinc.shopmecommon.entity.Category;
-import com.jabirinc.shopmecommon.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.supercsv.io.CsvBeanWriter;

@@ -32,6 +32,7 @@ public class Brand {
     @Column(length = 45, nullable = false, unique = true)
     private String name;
 
+
     @Column(length = 128, nullable = false)
     private String logo;
 

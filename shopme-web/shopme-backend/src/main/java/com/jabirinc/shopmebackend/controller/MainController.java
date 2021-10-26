@@ -1,4 +1,4 @@
-package com.jabirinc.shopmebackend.user.controller;
+package com.jabirinc.shopmebackend.controller;
 
 import com.jabirinc.shopmebackend.user.UserService;
 import com.jabirinc.shopmecommon.entity.User;
