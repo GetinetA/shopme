@@ -14,6 +14,8 @@ import java.util.Date;
 @Setter
 @Getter
 
+@ToString(of = {"id", "name"})
+
 
 @Entity()
 @Table(name = "products")
